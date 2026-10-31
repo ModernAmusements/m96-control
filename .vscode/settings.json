@@ -1,5 +1,4 @@
 {
-  "window.titleBarStyle": "custom",
   "workbench.colorCustomizations": {
     // Bottom bar — neon green
     "statusBar.background": "#39FF14",
@@ -7,20 +6,9 @@
     "statusBar.border": "#2BD40A",
     "statusBar.noFolderBackground": "#39FF14",
     "statusBar.noFolderForeground": "#0A0A0A",
-    // Light tint of neon green
+    // Light tint on status bar items only
     "statusBarItem.hoverBackground": "#C9FFB8",
     "statusBar.debuggingBackground": "#C9FFB8",
-    "statusBar.debuggingForeground": "#0A0A0A",
-    "activityBar.background": "#E8FFDB",
-    "activityBar.foreground": "#0A0A0A",
-    "activityBar.inactiveForeground": "#3E8A2A",
-    "activityBar.activeBorder": "#39FF14",
-    "activityBar.border": "#2BD40A",
-    "titleBar.activeBackground": "#E8FFDB",
-    "titleBar.inactiveBackground": "#F4FFEC",
-    "titleBar.activeForeground": "#0A0A0A",
-    "titleBar.inactiveForeground": "#6B6B6B",
-    "titleBar.border": "#2BD40A",
-    "tab.activeBorderTop": "#39FF14"
+    "statusBar.debuggingForeground": "#0A0A0A"
   }
 }
