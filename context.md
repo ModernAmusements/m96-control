@@ -13,6 +13,9 @@
 - **Workspace theme (this window only):** `.vscode/settings.json` — status bar neon green
   (`#39FF14`, black foreground, darker green border) + light tint (`#C9FFB8`) for hover and
   debugging states. Scoped to this workspace so other VS Code windows stay untouched.
+- **Extended (user follow-up "light"):** light neon tint also on activity bar + title bar
+  (`#E8FFDB`, custom title bar, neon active border) and active-tab top accent `#39FF14`.
+  Status bar stays full neon green.
 - No code or agent changes.
 
 ### Session end — 31.10.2026
