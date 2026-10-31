@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M96 — Control</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --black: #000000;
+            --medium-gray: #4a4a4a;
+            --light-gray: #e5e5e5;
+            --off-white: #f5f5f5;
+            --white: #ffffff;
+
+            --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--black);
+            background: var(--white);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .shell {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: var(--space-xl);
+        }
+
+        .top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-md);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--black);
+            margin-bottom: var(--space-xl);
+        }
+
+        .brand {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+        }
+
+        .sub {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.06em;
+            color: var(--medium-gray);
+            text-transform: uppercase;
+        }
+
+        .status {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .status::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            margin-right: 6px;
+            border-radius: 50%;
+            background: var(--black);
+            vertical-align: 1px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-lg);
+            align-items: stretch;
+        }
+
+        .panel {
+            border: 1px solid var(--black);
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--light-gray);
+            min-height: 68px;
+        }
+
+        .row:last-child {
+            border-bottom: 0;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .hint {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.06em;
+            color: var(--medium-gray);
+            text-transform: uppercase;
+        }
+
+        .toggle-wrap {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .toggle {
+            width: 56px;
+            height: 28px;
+            padding: 3px;
+            border: 1px solid var(--black);
+            border-radius: 999px;
+            background: var(--white);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle span {
+            display: block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--black);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .toggle[aria-checked="true"] {
+            background: var(--black);
+        }
+
+        .toggle[aria-checked="true"] span {
+            transform: translateX(28px);
+            background: var(--white);
+        }
+
+        .state {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 600;
+            min-width: 26px;
+        }
+
+        input[type="range"] {
+            width: 140px;
+            accent-color: var(--black);
+            cursor: pointer;
+        }
+
+        output {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--medium-gray);
+            min-width: 38px;
+            text-align: right;
+        }
+
+        .seg {
+            display: flex;
+            border: 1px solid var(--black);
+        }
+
+        .seg button {
+            padding: 6px 8px;
+            border: 0;
+            border-right: 1px solid var(--black);
+            background: var(--white);
+            color: var(--black);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .seg button:last-child {
+            border-right: 0;
+        }
+
+        .seg button.active {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .swatches {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .swatch {
+            padding: 8px 12px;
+            border: 1px solid var(--black);
+            background: var(--white);
+            color: var(--black);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .swatch.rainbow {
+            background: linear-gradient(90deg, #ff5f6d, #ffc371, #47cf73, #4facfe, #b06ab3);
+        }
+
+        .swatch.red {
+            background: #d92b2b;
+            border-color: #d92b2b;
+            color: var(--white);
+            opacity: 0.35;
+        }
+
+        .swatch.red:hover {
+            opacity: 0.65;
+        }
+
+        .preview {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: var(--space-lg);
+            border: 1px solid var(--black);
+            background: #0a0a0a;
+            color: var(--white);
+        }
+
+        .glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 72% 18%, rgba(255, 80, 80, 0.22), rgba(80, 160, 255, 0.10), transparent 62%);
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .preview.off .glow {
+            opacity: 0;
+        }
+
+        .preview > * {
+            position: relative;
+        }
+
+        .preview-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: var(--space-sm);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid #2a2a2a;
+            font-family: var(--font-mono);
+        }
+
+        .preview-head strong {
+            font-size: 22px;
+            letter-spacing: 0.1em;
+        }
+
+        .preview-head span {
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            color: #888;
+        }
+
+        .keys {
+            margin-top: auto;
+            padding-top: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            filter: brightness(calc(0.35 + var(--brightness, 0.8) * 0.65));
+            transition: filter 0.2s, opacity 0.2s;
+        }
+
+        .keyrow {
+            display: flex;
+            gap: 3px;
+        }
+
+        .key {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border: 1px solid #3a3a3a;
+            border-radius: 2px;
+            background: #1c1c1c;
+            color: #aaa;
+            font-family: var(--font-mono);
+            font-size: 7px;
+            white-space: nowrap;
+        }
+
+        .key.w2 { width: 50px; }
+        .key.space { width: 130px; }
+        .key.hot { border-color: #888; color: var(--white); }
+
+        .preview.on .key {
+            background: hsl(var(--h, 0) 78% 55%);
+            border-color: transparent;
+            color: #0a0a0a;
+        }
+
+        .preview.on .key.hot {
+            box-shadow: 0 0 0 1px var(--white);
+        }
+
+        .preview.off .keys {
+            filter: none;
+            opacity: 0.35;
+        }
+
+        .preview.off .key {
+            background: #1c1c1c;
+            border-color: #3a3a3a;
+            color: #666;
+            box-shadow: none;
+        }
+
+        .preview.breathing.on .keys {
+            animation: breathe 2.2s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.35; }
+            50% { opacity: 1; }
+        }
+
+        .preview-foot {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            padding-top: var(--space-sm);
+            border-top: 1px solid #2a2a2a;
+            font-family: var(--font-mono);
+            font-size: 8px;
+            color: #777;
+        }
+
+        .shortcuts {
+            margin-top: var(--space-xl);
+        }
+
+        .shortcuts h2 {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-sm);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: var(--space-sm);
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .data-table th {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--medium-gray);
+            background: var(--off-white);
+        }
+
+        .data-table td:first-child {
+            width: 34%;
+        }
+
+        .data-table td:last-child {
+            font-family: var(--font-mono);
+            font-size: 11px;
+        }
+
+        .note {
+            margin-top: var(--space-lg);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--light-gray);
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            padding: 8px 12px;
+            border: 1px solid var(--black);
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(8px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 760px) {
+            .shell {
+                padding: var(--space-md);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .row {
+                flex-wrap: wrap;
+            }
+
+            .preview {
+                min-height: 380px;
+            }
+
+            .key {
+                width: 20px;
+                height: 20px;
+                font-size: 6px;
+            }
+
+            .key.w2 { width: 40px; }
+            .key.space { width: 100px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <header class="top">
+            <div>
+                <div class="brand">M96 / BACKLIGHT</div>
+                <div class="sub">M96BT2 · Bluetooth BT2 · Battery 100%</div>
+            </div>
+            <div class="status">Connected</div>
+        </header>
+
+        <div class="grid">
+            <div class="panel">
+                <div class="row">
+                    <div>
+                        <div class="label">Backlight</div>
+                        <div class="hint">Power / mode · Fn + Del</div>
+                    </div>
+                    <div class="toggle-wrap">
+                        <button class="toggle" id="power" role="switch" aria-checked="true" aria-label="Toggle backlight preview">
+                            <span></span>
+                        </button>
+                        <span class="state" id="state">ON</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <div class="label">Brightness</div>
+                        <div class="hint">Fn + ↑ / ↓</div>
+                    </div>
+                    <div class="toggle-wrap">
+                        <input type="range" id="brightness" min="0" max="100" value="80" aria-label="Brightness preview">
+                        <output id="brightnessOut">80%</output>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <div class="label">Mode</div>
+                        <div class="hint">Fn + Del cycles</div>
+                    </div>
+                    <div class="seg" role="group" aria-label="Backlight mode">
+                        <button class="active" data-mode="always">Always on</button>
+                        <button data-mode="breathing">Breathing</button>
+                        <button data-mode="off">Off</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <div class="label">Colour</div>
+                        <div class="hint">Fixed LED layer</div>
+                    </div>
+                    <div class="swatches">
+                        <button class="swatch rainbow" data-color="rainbow">Rainbow</button>
+                        <button class="swatch red" data-color="red" title="Not supported on this M96">Red</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview on" id="preview">
+                <div class="glow"></div>
+
+                <div class="preview-head">
+                    <strong>M96</strong>
+                    <span id="modeLabel">ALWAYS ON</span>
+                </div>
+
+                <div class="keys" aria-hidden="true">
+                    <div class="keyrow" style="--h: 0">
+                        <span class="key">Esc</span>
+                        <span class="key">F1</span>
+                        <span class="key">F2</span>
+                        <span class="key">F3</span>
+                        <span class="key">F4</span>
+                        <span class="key">F5</span>
+                        <span class="key">F6</span>
+                        <span class="key">F7</span>
+                        <span class="key">F8</span>
+                        <span class="key">F9</span>
+                        <span class="key">F10</span>
+                        <span class="key">F11</span>
+                        <span class="key">F12</span>
+                        <span class="key hot">Del</span>
+                    </div>
+
+                    <div class="keyrow" style="--h: 35">
+                        <span class="key">~</span>
+                        <span class="key">1</span>
+                        <span class="key">2</span>
+                        <span class="key">3</span>
+                        <span class="key">4</span>
+                        <span class="key">5</span>
+                        <span class="key">6</span>
+                        <span class="key">7</span>
+                        <span class="key">8</span>
+                        <span class="key">9</span>
+                        <span class="key">0</span>
+                        <span class="key">-</span>
+                        <span class="key">=</span>
+                        <span class="key w2">Back</span>
+                    </div>
+
+                    <div class="keyrow" style="--h: 75">
+                        <span class="key w2">Tab</span>
+                        <span class="key">Q</span>
+                        <span class="key">W</span>
+                        <span class="key">E</span>
+                        <span class="key">R</span>
+                        <span class="key">T</span>
+                        <span class="key">Y</span>
+                        <span class="key">U</span>
+                        <span class="key">I</span>
+                        <span class="key">O</span>
+                        <span class="key">P</span>
+                        <span class="key">[</span>
+                        <span class="key">]</span>
+                        <span class="key">\</span>
+                    </div>
+
+                    <div class="keyrow" style="--h: 145">
+                        <span class="key w2">Caps</span>
+                        <span class="key">A</span>
+                        <span class="key">S</span>
+                        <span class="key">D</span>
+                        <span class="key">F</span>
+                        <span class="key">G</span>
+                        <span class="key">H</span>
+                        <span class="key">J</span>
+                        <span class="key">K</span>
+                        <span class="key">L</span>
+                        <span class="key">;</span>
+                        <span class="key">'</span>
+                        <span class="key w2">Enter</span>
+                    </div>
+
+                    <div class="keyrow" style="--h: 205">
+                        <span class="key w2">Shift</span>
+                        <span class="key">Z</span>
+                        <span class="key">X</span>
+                        <span class="key">C</span>
+                        <span class="key">V</span>
+                        <span class="key">B</span>
+                        <span class="key">N</span>
+                        <span class="key">M</span>
+                        <span class="key">,</span>
+                        <span class="key">.</span>
+                        <span class="key">/</span>
+                        <span class="key w2">Shift</span>
+                    </div>
+
+                    <div class="keyrow" style="--h: 280">
+                        <span class="key">Ctrl</span>
+                        <span class="key">Win</span>
+                        <span class="key">Alt</span>
+                        <span class="key space">Space</span>
+                        <span class="key">Alt</span>
+                        <span class="key hot">Fn</span>
+                        <span class="key">Ctrl</span>
+                        <span class="key hot">←</span>
+                        <span class="key hot">↑</span>
+                        <span class="key hot">↓</span>
+                        <span class="key hot">→</span>
+                    </div>
+                </div>
+
+                <div class="preview-foot">
+                    <span>Preview only · fixed rainbow LEDs</span>
+                    <span>Fn + Del</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="shortcuts">
+            <h2>Hardware Shortcuts</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Shortcut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Power / mode</td><td>Fn + Del</td></tr>
+                    <tr><td>Brightness</td><td>Fn + ↑ / ↓</td></tr>
+                    <tr><td>Speed</td><td>Fn + ← / →</td></tr>
+                    <tr><td>Volume</td><td>Turn the knob</td></tr>
+                    <tr><td>Backlight mode</td><td>Hold the knob 5 seconds</td></tr>
+                    <tr><td>Windows / Mac mode</td><td>Fn + Tab</td></tr>
+                    <tr><td>Bluetooth pairing</td><td>Esc + Q (hold 3–5 s)</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <p class="note">
+            The M96 has no software or HID lighting interface — this page previews the states, it cannot change the
+            hardware. Use the shortcuts above. Red is not available: the LED layer is fixed rainbow.
+        </p>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+        const preview = document.getElementById('preview');
+        const power = document.getElementById('power');
+        const state = document.getElementById('state');
+        const modeLabel = document.getElementById('modeLabel');
+        const brightness = document.getElementById('brightness');
+        const brightnessOut = document.getElementById('brightnessOut');
+        const modeButtons = document.querySelectorAll('[data-mode]');
+        const toast = document.getElementById('toast');
+
+        let on = true;
+        let mode = 'always';
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(showToast.timer);
+            showToast.timer = setTimeout(() => toast.classList.remove('show'), 2400);
+        }
+
+        function render() {
+            const active = on && mode !== 'off';
+            preview.classList.toggle('on', active);
+            preview.classList.toggle('off', !active);
+            preview.classList.toggle('breathing', mode === 'breathing');
+            preview.style.setProperty('--brightness', brightness.value / 100);
+            power.setAttribute('aria-checked', String(active));
+            state.textContent = active ? 'ON' : 'OFF';
+            modeLabel.textContent = !active ? 'OFF' : mode === 'breathing' ? 'BREATHING' : 'ALWAYS ON';
+            brightnessOut.textContent = brightness.value + '%';
+
+            modeButtons.forEach(button => {
+                button.classList.toggle('active', button.dataset.mode === mode);
+            });
+        }
+
+        power.addEventListener('click', () => {
+            if (on && mode !== 'off') {
+                on = false;
+                mode = 'off';
+            } else {
+                on = true;
+                mode = 'always';
+            }
+            render();
+        });
+
+        brightness.addEventListener('input', render);
+
+        modeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                mode = button.dataset.mode;
+                on = mode !== 'off';
+                render();
+            });
+        });
+
+        document.querySelectorAll('[data-color]').forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.dataset.color === 'red') {
+                    showToast('This M96 uses fixed rainbow LEDs — red is not available.');
+                } else {
+                    showToast('Rainbow is the only backlight colour on this M96.');
+                }
+            });
+        });
+
+        render();
+    </script>
+</body>
+</html>
