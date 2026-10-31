@@ -17,7 +17,7 @@ the keyboard states that are only reachable through hardware shortcuts.
 | `scripts/build-app.sh` | Reproducible build: `swiftc` → `M96 Control.app` → ad-hoc codesign |
 | `.opencode/agents/` | Agent packs (see [AGENTS.md](AGENTS.md)) |
 | `agents/` | Reference docs: HID protocol, project structure |
-| `.github/workflows/ci.yml` | CI build on every push, release artifact on tags |
+| `.github/workflows/ci.yml` | CI build on every push, release artifact on tags (macOS runner — public repo keeps it free) |
 
 ## The hardware truth
 

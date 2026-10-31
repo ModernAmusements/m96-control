@@ -25,7 +25,8 @@
   as an artifact; tags get a release with a zipped app.
 - **README:** covers hardware truth (fixed rainbow LEDs, no software lighting interface
   beyond report 2), hardware shortcuts, build/usage for app and web preview.
-- **GitHub:** repo `ModernAmusements/m96-control` (private), branch `main`, pushed.
+- **GitHub:** repo `ModernAmusements/m96-control` (public — user decision 31.10.2026, so the
+  macOS CI runner is free; no secrets in the repo), branch `main`, pushed.
 
 ### Known hardware facts (status quo)
 
@@ -43,7 +44,8 @@
 
 ### Session end — 31.10.2026
 
-- Repo live at `github.com/ModernAmusements/m96-control` (private), `main` = origin/main.
+- Repo live at `github.com/ModernAmusements/m96-control` (public — keeps macOS CI free; the
+  repo contains only source, docs and workflows, no secrets), `main` = origin/main.
 - Local tree clean; `M96 Control.app` untracked by design (artifact).
 - Build verified locally: script produces arm64 bundle, ad-hoc signature ok.
 - Next: observe hardware responses and grow `agents/HID_PROTOCOL.md` with device-verified facts only.
