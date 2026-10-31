@@ -6,6 +6,24 @@
 
 ---
 
+## 31. Oktober 2026 (3) — Legal disclaimer, release v1.0.0 attempt
+
+### Changes This Prompt
+
+- **README:** full legal disclaimer added (no affiliation, hardware risk, no fitness for
+  purpose, "as is" warranty disclaimer, third-party use, Gatekeeper/ad-hoc signing, no advice).
+- **Release attempt:** tag `v1.0.0` pushed → CI build job green, but the release job's zip step
+  failed: `download-artifact@v4` flattens the artifact path, `ditto` cannot find
+  `M96 Control.app` (space in name). Fix pending: space-free artifact name in `ci.yml`.
+- **Session hygiene:** no lingering processes or ports from this session (checked `lsof`/`pgrep`).
+
+### Session end — 31.10.2026
+
+- Working tree clean before this entry; disclaimer committed (see `main`).
+- Open: `ci.yml` release fix + re-tag `v1.0.0` (or `v1.0.1`) after user go-ahead.
+
+---
+
 ## 31. Oktober 2026 (2) — VS Code theme: neon green status bar
 
 ### Changes This Prompt

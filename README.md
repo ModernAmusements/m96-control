@@ -88,3 +88,33 @@ Ground rules:
 - **Never invent HID reports** — values in [`agents/HID_PROTOCOL.md`](agents/HID_PROTOCOL.md) are only added after they're observed on hardware.
 - **One commit per task**, push collected with user approval.
 - The `.app` bundle is generated, not edited.
+
+## Legal disclaimer
+
+**Use this software entirely at your own risk.** By downloading, building, or using any part of
+this project, you agree to the following:
+
+1. **No affiliation.** This project is not affiliated with, endorsed by, or sponsored by the
+   manufacturer of the M96BT2 keyboard. All product names, trademarks, logos, and brand names
+   are the property of their respective owners and are used solely for identification and
+   interoperability purposes.
+2. **Hardware risk.** This software sends HID output reports directly to a physical device.
+   Incorrect or unexpected report values can alter device behavior, corrupt configuration,
+   void your warranty, or damage the keyboard. The authors have tested only the values
+   documented in [`agents/HID_PROTOCOL.md`](agents/HID_PROTOCOL.md). You are solely
+   responsible for anything you send to your hardware.
+3. **No fitness for purpose.** The M96BT2's firmware exposes no software lighting interface
+   beyond the documented report. There is no guarantee the backlight will respond, or that any
+   build will work with your unit, firmware version, or OS version.
+4. **Software warranty disclaimer.** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+   KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+   COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION
+   OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR
+   THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+5. **Third-party use.** This repository is public. The authors accept no liability for how
+   others copy, modify, redistribute, or use this code or the documentation it contains.
+6. **macOS Gatekeeper.** The app is ad-hoc signed, not notarized. macOS may show a security
+   warning on first launch — that is expected. Run only builds you trust.
+7. **No advice.** Nothing in this repository constitutes professional, legal, or technical
+   advice about Bluetooth, HID, or any third-party hardware.
