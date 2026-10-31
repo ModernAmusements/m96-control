@@ -6,6 +6,21 @@
 
 ---
 
+## 31. Oktober 2026 (2) — VS Code theme: neon green status bar
+
+### Changes This Prompt
+
+- **Workspace theme (this window only):** `.vscode/settings.json` — status bar neon green
+  (`#39FF14`, black foreground, darker green border) + light tint (`#C9FFB8`) for hover and
+  debugging states. Scoped to this workspace so other VS Code windows stay untouched.
+- No code or agent changes.
+
+### Session end — 31.10.2026
+
+- Committed; see `main` for state.
+
+---
+
 ## 31. Oktober 2026 — Project foundation, agent packs, README, GitHub (initial deploy)
 
 ### Changes This Prompt

@@ -1,0 +1,14 @@
+{
+  "workbench.colorCustomizations": {
+    // Bottom bar — neon green
+    "statusBar.background": "#39FF14",
+    "statusBar.foreground": "#0A0A0A",
+    "statusBar.border": "#2BD40A",
+    "statusBar.noFolderBackground": "#39FF14",
+    "statusBar.noFolderForeground": "#0A0A0A",
+    // Light tint of neon green
+    "statusBarItem.hoverBackground": "#C9FFB8",
+    "statusBar.debuggingBackground": "#C9FFB8",
+    "statusBar.debuggingForeground": "#0A0A0A"
+  }
+}
